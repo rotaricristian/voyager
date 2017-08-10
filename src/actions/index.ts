@@ -2,6 +2,7 @@ import {BookmarkAction} from './bookmark';
 import {ConfigAction} from './config';
 import {DatasetAction} from './dataset';
 import {FilterAction} from './filter';
+import {LogAction} from './log';
 import {ResetAction} from './reset';
 import {ResultAction} from './result';
 import {ShelfAction} from './shelf';
@@ -20,12 +21,13 @@ export * from './shelf';
 export * from './state';
 export * from './undo-redo';
 export * from './shelf-preview';
+export * from './log';
 
 /**
  * Union type of all actions in our application.
  */
 export type Action = ResetAction | BookmarkAction | DatasetAction | ShelfAction | ShelfPreviewAction | UndoableAction |
-  ResultAction | ConfigAction | ApplicationStateAction | FilterAction;
+  ResultAction | ConfigAction | ApplicationStateAction | FilterAction | LogAction;
 
 export type ActionType = Action['type'];
 
@@ -50,6 +52,10 @@ const ACTION_TYPE_INDEX: {[k in ActionType]: 1} = {
   FILTER_MODIFY_TIME_UNIT: 1,
   FILTER_MODIFY_ONE_OF: 1,
   FILTER_REMOVE: 1,
+
+  LOG_ERRORS_ADD: 1,
+  LOG_WARNINGS_ADD: 1,
+  LOG_WARNINGS_REMOVE_ALL: 1,
 
   RESULT_RECEIVE: 1,
   RESULT_REQUEST: 1,

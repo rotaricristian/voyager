@@ -9,6 +9,7 @@ import {rootReducer} from '../reducers';
 // tslint:disable-next-line:no-unused-variable
 import {Store} from 'redux';
 import {createActionLog} from 'redux-action-log';
+import {Logger} from '../models/logger';
 import {createQueryListener} from './listener';
 
 const loggerMiddleware = createLogger({
@@ -28,6 +29,8 @@ if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
 }
 
 export let actionLogs: any;
+export const errorLogger = new Logger();
+
 export function configureStore(initialState = DEFAULT_STATE) {
   actionLogs = createActionLog({limit: null});
 
