@@ -5,7 +5,7 @@ import {TopLevelExtendedSpec} from 'vega-lite/build/src/spec';
 import * as vegaTooltip from 'vega-tooltip';
 import {LOG_ERRORS_ADD, LOG_WARNINGS_ADD, LogAction} from '../../actions/log';
 import {ActionHandler} from '../../actions/redux-action';
-import {Logger} from '../../models/logger';
+import {localLogger} from '../../store/index';
 
 export interface VegaLiteProps extends ActionHandler<LogAction> {
   spec: TopLevelExtendedSpec;
@@ -26,7 +26,6 @@ export class VegaLite extends React.PureComponent<VegaLiteProps, {}> {
     );
   }
   protected renderVega(vlSpec: TopLevelExtendedSpec) {
-    const localLogger = new Logger();
     // NOTE: spec used to test warning logger
     // vlSpec = {
     //   "description": "A simple bar chart with embedded data.",
@@ -57,6 +56,7 @@ export class VegaLite extends React.PureComponent<VegaLiteProps, {}> {
     if (localLogger.warnings.length > 0) {
       this.addVLWarnings(localLogger.warnings);
     }
+    localLogger.removeAll();
     const runtime = vega.parse(spec, vlSpec.config);
     const view = new vega.View(runtime)
       .logLevel(vega.Warn)

@@ -9,6 +9,7 @@ import {rootReducer} from '../reducers';
 // tslint:disable-next-line:no-unused-variable
 import {Store} from 'redux';
 import {createActionLog} from 'redux-action-log';
+import {Logger} from '../models/logger';
 import {createQueryListener} from './listener';
 
 const loggerMiddleware = createLogger({
@@ -26,6 +27,8 @@ if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   middleware.push(loggerMiddleware);
 }
+
+export const localLogger = new Logger();
 
 export let actionLogs: any;
 
