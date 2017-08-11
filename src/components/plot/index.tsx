@@ -4,6 +4,7 @@ import * as CSSModules from 'react-css-modules';
 import * as TetherComponent from 'react-tether';
 import {FacetedCompositeUnitSpec} from 'vega-lite/build/src/spec';
 import {BOOKMARK_MODIFY_NOTE, BookmarkAction} from '../../actions/bookmark';
+import {LogAction} from '../../actions/log';
 import {ActionHandler} from '../../actions/redux-action';
 import {ResultAction} from '../../actions/result';
 import {SHELF_SPEC_LOAD, ShelfAction} from '../../actions/shelf';
@@ -16,7 +17,8 @@ import {VegaLite} from '../vega-lite/index';
 import {BookmarkButton} from './bookmarkbutton';
 import * as styles from './plot.scss';
 
-export interface PlotProps extends ActionHandler<ShelfAction | BookmarkAction | ShelfPreviewAction | ResultAction> {
+export interface PlotProps extends ActionHandler<ShelfAction | BookmarkAction | ShelfPreviewAction |
+                                                  ResultAction | LogAction> {
   fieldInfos?: PlotFieldInfo[];
   isPlotListItem?: boolean;
   showBookmarkButton?: boolean;
@@ -69,7 +71,7 @@ export class PlotBase extends React.PureComponent<PlotProps, PlotState> {
   }
 
   public render() {
-    const {isPlotListItem, showBookmarkButton, showSpecifyButton, spec} = this.props;
+    const {isPlotListItem, showBookmarkButton, showSpecifyButton, spec, handleAction} = this.props;
 
     let notesDiv;
     const specKey = JSON.stringify(spec);
@@ -115,7 +117,7 @@ export class PlotBase extends React.PureComponent<PlotProps, PlotState> {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <VegaLite spec={spec}/>
+          <VegaLite spec={spec} handleAction={handleAction}/>
         </div>
         {notesDiv}
       </div>

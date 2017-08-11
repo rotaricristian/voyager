@@ -2,12 +2,14 @@ import {isWildcard} from 'compassql/build/src/wildcard';
 import * as React from 'react';
 import * as CSSModules from 'react-css-modules';
 import {TimeUnit} from 'vega-lite/build/src/timeunit';
+import {LOG_ERRORS_ADD, LogAction} from '../../actions/log';
+import {ActionHandler} from '../../actions/redux-action';
 import {ShelfFunction} from '../../models/shelf';
 import {ShelfFieldDef} from '../../models/shelf/encoding';
 import {getSupportedFunction} from '../../models/shelf/function';
 import * as styles from './function-picker.scss';
 
-export interface FunctionPickerProps {
+export interface FunctionPickerProps extends ActionHandler<LogAction> {
   fieldDefParts: {
     // Using Mapped Type to extract parts of ShelfFieldDef
     [k in 'fn' | 'type']?: ShelfFieldDef[k]
@@ -16,7 +18,7 @@ export interface FunctionPickerProps {
   onFunctionChange: (fn: ShelfFunction | TimeUnit) => void;
 }
 
-export class FunctionPickerBase extends React.PureComponent<FunctionPickerProps, any> {
+export class FunctionPickerBase extends React.PureComponent<FunctionPickerProps, {}> {
   constructor(props: FunctionPickerProps) {
     super(props);
 
@@ -24,7 +26,7 @@ export class FunctionPickerBase extends React.PureComponent<FunctionPickerProps,
     this.onFunctionChange = this.onFunctionChange.bind(this);
   }
   public render() {
-    const {fieldDefParts} = this.props;
+    const {fieldDefParts, handleAction} = this.props;
 
     const {fn, type} = fieldDefParts;
     const supportedFns = getSupportedFunction(type);
@@ -42,7 +44,12 @@ export class FunctionPickerBase extends React.PureComponent<FunctionPickerProps,
     ));
 
     if (isWildcard(fn)) {
-      throw new Error('Wildcard function not supported yet');
+      handleAction({
+        type: LOG_ERRORS_ADD,
+        payload: {
+          errors: ['Wildcard function not supported yet']
+        }
+      });
     } else {
       return radios.length > 0 && (
         <div styleName="function-chooser">

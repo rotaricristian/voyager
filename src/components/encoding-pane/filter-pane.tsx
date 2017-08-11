@@ -9,6 +9,8 @@ import {isOneOfFilter, isRangeFilter, OneOfFilter, RangeFilter} from 'vega-lite/
 import {TimeUnit} from 'vega-lite/build/src/timeunit';
 import {FILTER_ADD, FILTER_MODIFY_TIME_UNIT,
   FILTER_REMOVE, FilterAction} from '../../actions/filter';
+import {LogAction} from '../../actions/log';
+import {ActionHandler} from '../../actions/redux-action';
 import {DraggableType} from '../../constants';
 import {convertToDateTimeObject, getDefaultList, getDefaultRange} from '../../models/shelf/filter';
 import {DraggedFieldIdentifier} from '../field';
@@ -17,6 +19,8 @@ import * as styles from './filter-pane.scss';
 import {FunctionPicker} from './function-picker';
 import {OneOfFilterShelf} from './one-of-filter-shelf';
 import {RangeFilterShelf} from './range-filter-shelf';
+import {ShelfAction} from '../../actions/shelf';
+import {DatasetSchemaChangeFieldType} from '../../actions/dataset';
 
 
 /**
@@ -32,10 +36,10 @@ export interface FilterPaneDropTargetProps {
   canDrop: boolean;
 }
 
-export interface FilterPanePropsBase {
+export interface FilterPanePropsBase extends ActionHandler<FilterAction | LogAction |
+                                                            ShelfAction | DatasetSchemaChangeFieldType> {
   filters: Array<RangeFilter | OneOfFilter>;
   schema: Schema;
-  handleAction?: (action: FilterAction) => void;
 }
 
 interface FilterPaneProps extends FilterPaneDropTargetProps, FilterPanePropsBase {};
@@ -103,6 +107,7 @@ class FilterPaneBase extends React.PureComponent<FilterPaneProps, {}> {
           type: ExpandedType.TEMPORAL
         }}
         onFunctionChange={onFunctionChange}
+        handleAction={handleAction}
       /> ;
     let filterComponent;
     const timeUnit = filter.timeUnit;
@@ -195,6 +200,7 @@ class FilterPaneBase extends React.PureComponent<FilterPaneProps, {}> {
       case TimeUnit.YEARMONTHDATE:
         return true;
       default:
+        // This should never happen because other time unit is not in the UI
         throw new Error(timeUnit + ' is not supported');
     }
   }
@@ -207,6 +213,7 @@ const filterShelfTarget: DropTargetSpec<FilterPaneProps> = {
     }
     const {filter} = monitor.getItem() as DraggedFieldIdentifier;
     if (isWildcard(filter.field)) {
+      // This should never happen -- we don't allow drop filter in wildcard shelf
       throw new Error ('Cannot add wildcard filter');
     }
     props.handleAction({

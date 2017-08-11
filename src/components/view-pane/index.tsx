@@ -14,6 +14,7 @@ import {Plot} from '../plot';
 import {PlotList} from '../plot-list';
 import {RelatedViews} from './related-views';
 import * as styles from './view-pane.scss';
+import {LogAction} from '../../actions/log';
 
 export interface ViewPaneProps extends ActionHandler<ShelfAction> {
   isQuerySpecific: boolean;
@@ -80,5 +81,5 @@ export const ViewPane = connect(
       bookmark: selectBookmark(state)
     };
   },
-  createDispatchHandler<ShelfAction>()
+  createDispatchHandler<ShelfAction | LogAction>()
 )(CSSModules(ViewPaneBase, styles));

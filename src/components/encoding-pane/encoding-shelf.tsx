@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as CSSModules from 'react-css-modules';
 import {ConnectDropTarget, DropTarget, DropTargetCollector, DropTargetSpec} from 'react-dnd';
 import {ActionHandler} from '../../actions/index';
+import {LOG_ERRORS_ADD, LogAction} from '../../actions/log';
 import {
   SHELF_FIELD_ADD, SHELF_FIELD_MOVE, SHELF_FIELD_REMOVE, SHELF_FUNCTION_CHANGE, ShelfEncodingAction
 } from '../../actions/shelf';
@@ -25,7 +26,7 @@ export interface EncodingShelfDropTargetProps {
   item: Object;
 }
 
-export interface EncodingShelfPropsBase extends ActionHandler<ShelfEncodingAction> {
+export interface EncodingShelfPropsBase extends ActionHandler<ShelfEncodingAction | LogAction> {
   id: ShelfId;
 
   fieldDef: ShelfFieldDef;
@@ -72,13 +73,14 @@ class EncodingShelfBase extends React.PureComponent<EncodingShelfProps, {}> {
   }
 
   private field() {
-    const {id, fieldDef, schema} = this.props;
+    const {id, fieldDef, schema, handleAction} = this.props;
     const renderFunctionPicker = fieldDef.type === 'quantitative' || fieldDef.type === 'temporal';
 
     const functionPicker = renderFunctionPicker ?
       <FunctionPicker
         fieldDefParts={fieldDef}
         onFunctionChange={this.onFunctionChange.bind(this)}
+        handleAction={handleAction}
       /> : null;
     return (
       <div styleName='field-wrapper'>
@@ -132,7 +134,12 @@ const encodingShelfTarget: DropTargetSpec<EncodingShelfProps> = {
         });
         break;
       default:
-        throw new Error('Field dragged from unregistered source type to EncodingShelf');
+        props.handleAction({
+          type: LOG_ERRORS_ADD,
+          payload: {
+            errors: ['Field dragged from unregistered source type to EncodingShelf']
+          }
+        });
     }
   }
 };
