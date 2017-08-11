@@ -45,8 +45,6 @@ class EncodingPanelBase extends React.PureComponent<EncodingPanelProps, {}> {
   }
 
   public render() {
-    console.log(createDispatchHandler<ShelfAction | LogAction>());
-    console.log(this.props.handleAction);
     const {specPreview} = this.props;
     const {anyEncodings} = this.props.spec;
 

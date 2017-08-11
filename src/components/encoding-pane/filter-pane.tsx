@@ -7,10 +7,12 @@ import * as CSSModules from 'react-css-modules';
 import {ConnectDropTarget, DropTarget, DropTargetCollector, DropTargetSpec} from 'react-dnd';
 import {isOneOfFilter, isRangeFilter, OneOfFilter, RangeFilter} from 'vega-lite/build/src/filter';
 import {TimeUnit} from 'vega-lite/build/src/timeunit';
+import {DatasetSchemaChangeFieldType} from '../../actions/dataset';
 import {FILTER_ADD, FILTER_MODIFY_TIME_UNIT,
   FILTER_REMOVE, FilterAction} from '../../actions/filter';
 import {LogAction} from '../../actions/log';
 import {ActionHandler} from '../../actions/redux-action';
+import {ShelfAction} from '../../actions/shelf';
 import {DraggableType} from '../../constants';
 import {convertToDateTimeObject, getDefaultList, getDefaultRange} from '../../models/shelf/filter';
 import {DraggedFieldIdentifier} from '../field';
@@ -19,8 +21,6 @@ import * as styles from './filter-pane.scss';
 import {FunctionPicker} from './function-picker';
 import {OneOfFilterShelf} from './one-of-filter-shelf';
 import {RangeFilterShelf} from './range-filter-shelf';
-import {ShelfAction} from '../../actions/shelf';
-import {DatasetSchemaChangeFieldType} from '../../actions/dataset';
 
 
 /**
