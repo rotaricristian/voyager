@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as CSSModules from 'react-css-modules';
 import {connect} from 'react-redux';
 import {FacetedCompositeUnitSpec} from 'vega-lite/build/src/spec';
+import {LogAction} from '../../actions/log';
 import {ActionHandler, createDispatchHandler} from '../../actions/redux-action';
 import {ShelfAction} from '../../actions/shelf';
 import {State} from '../../models';

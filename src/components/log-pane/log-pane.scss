@@ -1,0 +1,42 @@
+.log-pane-wrapper {
+  z-index: 1;
+  position: absolute;
+  top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  width: 500px;
+}
+
+.log-pane {
+  padding: 5px;
+  z-index: 1;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  float: right;
+  ul {
+    padding-left: 20px;
+  }
+  li {
+    list-style-position: inside;
+  }
+}
+
+.error-pane {
+  @extend .log-pane;
+  background-color: #f2dede;
+  color: #a94442;
+}
+
+.warning-pane {
+  @extend .log-pane;
+  background-color: #fff9e5;
+  color: #FFCC00;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
